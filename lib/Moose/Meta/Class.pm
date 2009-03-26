@@ -910,6 +910,25 @@ required version. The C<role> option also takes the C<-version> as an
 argument, but the option hash reference can also contain any other
 role relevant values like exclusions or parameterized role arguments.
 
+Note that if you are intending to create a series of anonymous classes
+sharing the same ancestors and roles, but with varying properties, setting
+C<cache> is probably not what you want, ie:
+
+  for ( 1 .. 5 ) {
+    my $metaclass = Moose::Meta::Class->create_anon_class(
+        superclasses => ['Foo'],
+        roles        => ['Bar'],
+        cache        => 1,
+    );
+    $metaclass->add_attribute( bar => ( isa => 'Str', is => 'rw', default => $_ ) );
+    $metaclass->make_immutable();
+  }
+
+This will die on the second iteration due to trying to modify the cached
+( and immutable ) object produced in the first iteration.
+
+
+
 =item B<< $metaclass->new_object(%params) >>
 
 This overrides the parent's method in order to add support for
