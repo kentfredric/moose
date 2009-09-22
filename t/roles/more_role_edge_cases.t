@@ -155,7 +155,7 @@ use Test::Fatal;
 # useful here (although more tests cant hurt)
 
 {
-    use List::Util qw/shuffle/;
+    use List::Util ();
 
     {
         package Abstract;
@@ -195,13 +195,13 @@ use Test::Fatal;
         package SimpleClassWithSome;
         use Moose;
 
-        eval { with ::shuffle qw/ConcreteA ConcreteB/ };
+        eval { with List::Util::shuffle qw/ConcreteA ConcreteB/ };
         ::ok( !$@, "simple composition without abstract" ) || ::diag $@;
 
         package SimpleClassWithAll;
         use Moose;
 
-        eval { with ::shuffle qw/ConcreteA ConcreteB Abstract/ };
+        eval { with List::Util::shuffle qw/ConcreteA ConcreteB Abstract/ };
         ::ok( !$@, "simple composition with abstract" ) || ::diag $@;
     }
 
@@ -223,19 +223,19 @@ use Test::Fatal;
         package ClassWithSome;
         use Moose;
 
-        eval { with ::shuffle qw/ConcreteC ConcreteB/ };
+        eval { with List::Util::shuffle qw/ConcreteC ConcreteB/ };
         ::ok( !$@, "composition without abstract" ) || ::diag $@;
 
         package ClassWithAll;
         use Moose;
 
-        eval { with ::shuffle qw/ConcreteC Abstract ConcreteB/ };
+        eval { with List::Util::shuffle qw/ConcreteC Abstract ConcreteB/ };
         ::ok( !$@, "composition with abstract" ) || ::diag $@;
 
         package ClassWithEverything;
         use Moose;
 
-        eval { with ::shuffle qw/ConcreteC Abstract ConcreteA ConcreteB/ }; # this should clash
+        eval { with List::Util::shuffle qw/ConcreteC Abstract ConcreteA ConcreteB/ }; # this should clash
         ::ok( !$@, "can compose ConcreteA and ConcreteC together" );
     }
 
